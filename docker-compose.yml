@@ -1,0 +1,33 @@
+
+version: '3.8'
+
+services:
+  booking-mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    container_name: booking-mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: booking_db
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  booking-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.booking
+    container_name: booking-service
+    ports:
+      - "8081:8080"
+    depends_on:
+      - booking-mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://booking-mysql:3306/booking_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+
+volumes:
+  mysql-data:
