@@ -84,12 +84,9 @@ public class BookingService {
             booking.setBookingStartDate(request.getBookingStartDate());
             booking.setBookingEndDate(request.getBookingEndDate());
 
-            // Automatically calculate totalAmount (e.g., $50/day)
-            long days = ChronoUnit.DAYS.between(request.getBookingStartDate(), request.getBookingEndDate());
-            double total = days * 50.0;
-            booking.setTotalAmount(total);
+			booking.setTotalAmount(request.getTotalAmount());
 
-            booking.setStatus(Status.PENDING);
+            booking.setStatus(Status.CONFIRMED);
             booking.setCreatedAt(createdTime);
             booking.setUpdatedAt(createdTime);
 
@@ -98,7 +95,7 @@ public class BookingService {
             // ✅ Insert booked dates into product_bookings
             LocalDate date = request.getBookingStartDate();
             while (!date.isAfter(request.getBookingEndDate().minusDays(1))) {
-                productBookingRepository.save(new ProductBooking(request.getProductId(), date));
+                productBookingRepository.save(new ProductBooking(request.getProductId(), date.atStartOfDay()) );
                 date = date.plusDays(1);
             }
 

@@ -1,7 +1,7 @@
 package com.nusiss.ass.booking.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "product_bookings")
@@ -13,12 +13,12 @@ public class ProductBooking {
 
     private int productId;
 
-    private LocalDate date;
+    private LocalDateTime  date;
 
     // Constructors
     public ProductBooking() {}
 
-    public ProductBooking(int productId, LocalDate date) {
+    public ProductBooking(int productId, LocalDateTime date) {
         this.productId = productId;
         this.date = date;
     }
@@ -28,6 +28,6 @@ public class ProductBooking {
     public int getProductId() { return productId; }
     public void setProductId(int productId) { this.productId = productId; }
 
-    public LocalDate getDate() { return date; }
-    public void setDate(LocalDate date) { this.date = date; }
+    public LocalDateTime getDate() { return date; }
+    public void setDate(LocalDateTime date) { this.date = date; }
 }
