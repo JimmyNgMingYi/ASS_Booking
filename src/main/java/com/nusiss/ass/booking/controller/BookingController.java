@@ -3,6 +3,7 @@ package com.nusiss.ass.booking.controller;
 import com.nusiss.ass.booking.dto.BookingRequestDto;
 import com.nusiss.ass.booking.dto.BookingResponseDto;
 import com.nusiss.ass.booking.dto.BookingDetailsDto;
+import com.nusiss.ass.booking.dto.BookingSummaryDto;
 import com.nusiss.ass.booking.dto.BookingBaseResponse;
 import com.nusiss.ass.booking.model.Booking;
 import com.nusiss.ass.booking.service.BookingService;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Map;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -83,6 +86,19 @@ public ResponseEntity<?> checkAvailability(
                 "available", false,
                 "message", "Missing or invalid parameters."
             )
+        );
+    }
+}
+
+// ✅ Clean version: Get all bookings for a user
+@GetMapping("/user/{userId}")
+public ResponseEntity<?> getBookingsByUserId(@PathVariable int userId) {
+    try {
+        List<BookingSummaryDto> bookings = bookingService.getBookingsByUserId(userId);
+        return ResponseEntity.ok(bookings);
+    } catch (Exception e) {
+        return ResponseEntity.status(500).body(
+            Map.of("message", "Failed to fetch bookings for user.")
         );
     }
 }

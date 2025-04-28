@@ -7,9 +7,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.nusiss.ass.booking.dto.BookingRequestDto;
 import com.nusiss.ass.booking.dto.BookingResponseDto;
+import com.nusiss.ass.booking.dto.BookingSummaryDto;
 import com.nusiss.ass.booking.dto.BookingErrorResponseDto;
 import com.nusiss.ass.booking.dto.BookingBaseResponse;
 import com.nusiss.ass.booking.model.Booking;
@@ -69,7 +72,9 @@ public class BookingService {
                         ));
             }
 
-            String bookingId = "BK-" + UUID.randomUUID();
+            long count = bookingRepository.countTotalBookings();
+	    long nextNumber = count + 1;
+	    String bookingId = String.format("BK-%05d", nextNumber);
             LocalDateTime createdTime = LocalDateTime.now();
 
             Booking booking = new Booking();
@@ -126,6 +131,32 @@ public class BookingService {
 
    public boolean isAvailable(int productId, LocalDate startDate, LocalDate endDate) {
     return !bookingRepository.existsOverlappingBooking(productId, startDate, endDate);
+}
+
+// ✅ New method to list bookings by userId
+public List<BookingSummaryDto> getBookingsByUserId(int userId) {
+    List<Booking> bookings = bookingRepository.findAllByUserId(userId);
+    return bookings.stream().map(booking -> {
+        BookingSummaryDto dto = new BookingSummaryDto();
+        dto.setBookingId(decryptSafe(booking.getBookingId())); // safe decrypt
+        dto.setProductId(booking.getProductId());
+        dto.setBookingStartDate(booking.getBookingStartDate());
+        dto.setBookingEndDate(booking.getBookingEndDate());
+        dto.setStatus(booking.getStatus().toString());
+        dto.setTotalAmount(booking.getTotalAmount());
+	dto.setCreatedAt(booking.getCreatedAt());
+        return dto;
+    }).collect(Collectors.toList());
+}
+
+// ✅ Helper to decrypt safely without crashing
+private String decryptSafe(String bookingId) {
+    try {
+        return decrypt(bookingId);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "UNKNOWN";
+    }
 }
 
 

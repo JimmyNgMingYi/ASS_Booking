@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, String> {
@@ -13,7 +14,6 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
     @Query("SELECT b FROM Booking b WHERE b.bookingId = :bookingId")
     Optional<Booking> findByBookingId(@Param("bookingId") String bookingId);
 
-    // ✅ Check if there's any overlapping booking for a product
     @Query("SELECT COUNT(b) > 0 FROM Booking b " +
            "WHERE b.productId = :productId " +
            "AND b.bookingStartDate < :endDate " +
@@ -23,4 +23,11 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
         @Param("startDate") LocalDate startDate,
         @Param("endDate") LocalDate endDate
     );
+
+    @Query("SELECT COUNT(b) FROM Booking b")
+    long countTotalBookings();
+
+
+    // ✅ New method: find all bookings by userId
+    List<Booking> findAllByUserId(int userId);
 }

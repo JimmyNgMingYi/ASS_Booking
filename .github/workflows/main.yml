@@ -94,12 +94,17 @@ jobs:
       - name: Tag Docker image
         if: ${{ success() }}
         run: |
-          docker tag booking_microservice:latest 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com/ass-backend:booking_microservice-latest
+          docker tag booking_microservice:latest 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com/ass-backend:booking_microservice_updated
 
       - name: Push Docker image to ECR
         if: ${{ success() }}
         run: |
-          docker push 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com/ass-backend:booking_microservice-latest
+          docker push 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com/ass-backend:booking_microservice_updated
+	
+	- name: Trigger ECS service update
+        run: |
+          # Force ECS to launch new tasks and pull the latest image from ECR
+          aws ecs update-service --cluster ass-ecs --service ass-ecs-fargate-v3 --force-new-deployment
 
 #      - name: Create SSH key file
 #        if: ${{ success() }}
