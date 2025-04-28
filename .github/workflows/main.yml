@@ -89,12 +89,12 @@ jobs:
       - name: Build and Tag Docker Image
         if: ${{ success() }}
         run: |
-          docker build -t payment_microservice -f Dockerfile.payment .
+          docker build -t booking_microservice -f Dockerfile.booking .
 
       - name: Tag Docker image
         if: ${{ success() }}
         run: |
-          docker tag payment_microservice:latest 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com/ass-backend:booking_microservice_updated
+          docker tag booking_microservice:latest 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com/ass-backend:booking_microservice_updated
 
       - name: Push Docker image to ECR
         if: ${{ success() }}
