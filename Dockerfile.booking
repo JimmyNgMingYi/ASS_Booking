@@ -38,5 +38,5 @@ ENTRYPOINT sh -c "echo '🚀 RUNTIME ENVIRONMENT:' && \
   echo DB_DB=$DB_DB && \
   echo DB_USERNAME=$DB_USERNAME && \
   echo DB_PASSWORD=$DB_PASSWORD && \
-  java -Ddb.ip=$DB_IP -Ddb.db=$DB_DB -Ddb.username=$DB_USERNAME -Ddb.password=$DB_PASSWORD -jar Team5_ASS_booking-1.0.jar"
+  java -Ddb.ip=$DB_IP -Ddb.db=$DB_DB -Ddb.username=$DB_USERNAME -Ddb.password=$DB_PASSWORD -Dserver.port=8081 -jar Team5_ASS_booking-1.0.jar"
 
