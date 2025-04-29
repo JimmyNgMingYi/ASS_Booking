@@ -27,8 +27,8 @@ ENV DB_DB=${DB_DB}
 ENV DB_USERNAME=${DB_USERNAME}
 ENV DB_PASSWORD=${DB_PASSWORD}
 
-# Expose port 8080
-EXPOSE 8080
+# Expose port 8081
+EXPOSE 8081
 
 # Run the application
 # ENTRYPOINT ["java", "-Ddb.ip=${DB_IP}", "-Ddb.db=${DB_DB}", "-Ddb.username=${DB_USERNAME}", "-Ddb.password=${DB_PASSWORD}" ,"-jar", "Team5_ASS_booking-1.0.jar"]
