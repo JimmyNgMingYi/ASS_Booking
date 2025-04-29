@@ -32,5 +32,11 @@ EXPOSE 8081
 
 # Run the application
 # ENTRYPOINT ["java", "-Ddb.ip=${DB_IP}", "-Ddb.db=${DB_DB}", "-Ddb.username=${DB_USERNAME}", "-Ddb.password=${DB_PASSWORD}" ,"-jar", "Team5_ASS_booking-1.0.jar"]
-ENTRYPOINT ["java", "-jar", "Team5_ASS_booking-1.0.jar"]
+# ENTRYPOINT ["java", "-jar", "Team5_ASS_booking-1.0.jar"]
+ENTRYPOINT sh -c "echo '🚀 RUNTIME ENVIRONMENT:' && \
+  echo DB_IP=$DB_IP && \
+  echo DB_DB=$DB_DB && \
+  echo DB_USERNAME=$DB_USERNAME && \
+  echo DB_PASSWORD=$DB_PASSWORD && \
+  java -Ddb.ip=$DB_IP -Ddb.db=$DB_DB -Ddb.username=$DB_USERNAME -Ddb.password=$DB_PASSWORD -jar Team5_ASS_booking-1.0.jar"
 
