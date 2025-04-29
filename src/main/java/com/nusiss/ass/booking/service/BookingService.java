@@ -30,6 +30,9 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+
 @Service
 public class BookingService {
 
@@ -93,11 +96,13 @@ public class BookingService {
             booking = bookingRepository.save(booking);
 
             // ✅ Insert booked dates into product_bookings
-            LocalDate date = request.getBookingStartDate();
-            while (!date.isAfter(request.getBookingEndDate().minusDays(1))) {
-                productBookingRepository.save(new ProductBooking(request.getProductId(), date.atStartOfDay()) );
-                date = date.plusDays(1);
-            }
+            OffsetDateTime date = request.getBookingStartDate().atStartOfDay().atOffset(ZoneOffset.UTC);
+			OffsetDateTime end = request.getBookingEndDate().atStartOfDay().atOffset(ZoneOffset.UTC);
+
+			while (!date.isEqual(end)) {
+			productBookingRepository.save(new ProductBooking(request.getProductId(), date));
+			date = date.plusDays(1);
+			}
 
             // Prepare response
             response.setBookingId(bookingId);
